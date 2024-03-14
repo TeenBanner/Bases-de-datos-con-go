@@ -1,0 +1,13 @@
+run This command to create DataBase:
+    docker run --name GoDB -e POSTGRES_USER=edteam -e POSTGRES_PASSWORD=edteam -p 3000:5432 -d postgres:latest
+
+run this commands to start data base:
+    Get in the container:
+        docker exec -it GoDB psql -U edteam
+    Start DataBase:
+        CREATE DATABASE godb;
+    When you finish you can get in database directly through docker;
+        docker exec -it GoDB psql godb -U edteam
+
+DB_ROOT_USER = edteam
+Password_DB = edteam
