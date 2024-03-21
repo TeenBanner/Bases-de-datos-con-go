@@ -1,6 +1,7 @@
 package invoiceitem
 
 import (
+	"database/sql"
 	"time"
 )
 
@@ -13,13 +14,12 @@ type Model struct {
 	UpdatedAt       time.Time
 }
 
+// slice of models
+type Models []*Model
+
 type Storage interface {
 	Migrate() error
-	// Create(*Model) error
-	// Update(*Model) error
-	// GetAll() (Models, error)
-	// GetByID(uint) (*Model, error)
-	// Delete() error
+	CreateTx(*sql.Tx, uint, *Models) error
 }
 
 // service of invoice item
