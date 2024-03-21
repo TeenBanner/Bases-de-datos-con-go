@@ -36,3 +36,17 @@ func NewPostgresDB() {
 func Pool() *sql.DB {
 	return db
 }
+
+// StringToNull help us to work with null values on DataBase
+func stringtoNull(s string) sql.NullString { // Recibe un string y devuelve una estructura NullString
+	// Create Null Value
+	null := sql.NullString{
+		String: s,
+	}
+	// verificamos si nos estan mandando un valor nullo desde la base de datos o si nos estan enviando un valor
+	if null.String != "" {
+		null.Valid = true
+	}
+	// retornamos el valor null
+	return null
+}

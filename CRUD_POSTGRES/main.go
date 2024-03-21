@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	invoiceheader "github.com/TeenBanner/db-go/pkg/invoiceHeader"
@@ -12,7 +13,7 @@ import (
 
 func main() {
 	storage.NewPostgresDB()
-	//  migraciones
+	// migraciones
 	storageProduct := storage.NewPsqlProduct(storage.Pool())
 	serviceProduct := product.NewService(storageProduct)
 
@@ -33,5 +34,19 @@ func main() {
 	if err := ServiceInvoiceItem.Migrate(); err != nil {
 		log.Fatalf("InvoiceItemError: %v", err)
 	}
+	// Create Method using storageproduct && service product
+
+	// instaciamos el producto a crear
+	m := &product.Model{
+		Name:        "Bases de datos con Go",
+		Price:       46,
+		Observation: "on fire",
+	}
+	if err := serviceProduct.Create(m); err != nil {
+		log.Fatalf("Product Create at main: %v", err)
+	}
+	// revisamos el id del producto insertado y la fecha de creacion que se creo solo con llamar al metodo migrate
+
+	fmt.Printf("%+v", m)
 
 }
