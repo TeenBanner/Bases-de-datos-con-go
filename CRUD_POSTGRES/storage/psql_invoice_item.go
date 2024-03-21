@@ -3,6 +3,8 @@ package storage
 import (
 	"database/sql"
 	"fmt"
+
+	invoiceitem "github.com/TeenBanner/db-go/pkg/invoiceItem"
 )
 
 const (
@@ -21,6 +23,10 @@ const (
 		CONSTRAINT invoice_items_product_id_fk FOREIGN KEY (product_id)
 		REFERENCES products (id) ON UPDATE RESTRICT ON DELETE RESTRICT
 	);`
+
+	psqlCreateInvoiceItem = `
+		INSERT INTO invoice_items()
+	`
 )
 
 // Psql used for work with postgres -Invoice_items
@@ -50,4 +56,8 @@ func (p *PsqlInvoiceItem) Migrate() error {
 	fmt.Println("Migracion de InvoiceItem ejecutada correctamente")
 
 	return nil
+}
+
+func (p *PsqlInvoiceItem) CreateTx(tx *sql.Tx, Item *invoiceitem.Model) {
+
 }

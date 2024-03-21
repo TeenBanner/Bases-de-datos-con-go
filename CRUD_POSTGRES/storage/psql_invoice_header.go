@@ -50,7 +50,7 @@ func (p *PsqlInvoiceHeader) Migrate() error {
 }
 
 func (p *PsqlInvoiceHeader) CreateTx(tx *sql.Tx, h *invoiceheader.Model) error {
-	stmt, err := tx.Prepare()
+	stmt, err := tx.Prepare(psqlCreateInvoiceHeader)
 	if err != nil {
 		return err
 	}
