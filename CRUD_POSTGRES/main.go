@@ -1,9 +1,6 @@
 package main
 
 import (
-	"database/sql"
-	"errors"
-	"fmt"
 	"log"
 
 	invoiceheader "github.com/TeenBanner/db-go/pkg/invoiceHeader"
@@ -54,23 +51,36 @@ func main() {
 
 	// GetALl Method
 
-	products, err := serviceProduct.GetAll()
-	if err != nil {
-		log.Fatalf("Product.GetAll(): %v", err)
+	// products, err := serviceProduct.GetAll()
+	// if err != nil {
+	// 	log.Fatalf("Product.GetAll(): %v", err)
+	// }
+
+	// fmt.Println(products)
+
+	// fmt.Println("Get By ID method: ")
+
+	// product, err := serviceProduct.GetByID(0)
+	// switch {
+	// case errors.Is(err, sql.ErrNoRows):
+	// 	fmt.Println("El id no existe")
+	// case err != nil:
+	// 	log.Fatalf("Error: %v", err)
+	// default:
+	// 	fmt.Println(product)
+	// }
+
+	// Update method
+
+	productToUpdate := &product.Model{
+		ID:    40,
+		Name:  "DB con go",
+		Price: 80,
 	}
 
-	fmt.Println(products)
-
-	fmt.Println("Get By ID method: ")
-
-	product, err := serviceProduct.GetByID(0)
-	switch {
-	case errors.Is(err, sql.ErrNoRows):
-		fmt.Println("El id no existe")
-	case err != nil:
-		log.Fatalf("Error: %v", err)
-	default:
-		fmt.Println(product)
+	err := serviceProduct.Update(productToUpdate)
+	if err != nil {
+		log.Fatalf("Error al actualizar el producto %v", err)
 	}
 
 }

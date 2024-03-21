@@ -1,8 +1,13 @@
 package product
 
 import (
+	"errors"
 	"fmt"
 	"time"
+)
+
+var (
+	ErrIDNotFound = errors.New("El producto no contiene ese id")
 )
 
 // model of product
@@ -25,7 +30,7 @@ type Models []*Model
 type Storage interface {
 	Migrate() error
 	Create(*Model) error
-	// Update(*Model) error
+	Update(*Model) error
 	GetAll() (Models, error)
 	GetByID(uint) (*Model, error)
 	// Delete() error
@@ -62,4 +67,13 @@ func (s *Service) GetAll() (Models, error) {
 // GetByID service it's used for get an element by it id
 func (s *Service) GetByID(ID uint) (*Model, error) {
 	return s.storage.GetByID(ID)
+}
+
+// Update service implement the Storage interfaces updating a product
+func (s *Service) Update(m *Model) error {
+	if m.ID == 0 {
+		return ErrIDNotFound
+	}
+	m.UpdatedAt = time.Now()
+	return s.storage.Update(m)
 }

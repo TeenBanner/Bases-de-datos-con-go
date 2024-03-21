@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"sync"
+	"time"
 
 	_ "github.com/lib/pq"
 )
@@ -48,5 +49,15 @@ func stringtoNull(s string) sql.NullString { // Recibe un string y devuelve una 
 		null.Valid = true
 	}
 	// retornamos el valor null
+	return null
+}
+
+// TimeToNull it's a helper to work with null dates
+func timeToNull(t time.Time) sql.NullTime { // recive una estructura de tipo Time y devuelve un sql.NullTime
+	null := sql.NullTime{Time: t} // Creamos la variable null la cual es de tipo NullTime y le pasamos el valor t como valor del campo time
+	if !null.Time.IsZero() {      // verificamos si null no tiene el valor cero para asignar que null no es un dato nullo
+		null.Valid = true
+	}
+	// retornamos null
 	return null
 }

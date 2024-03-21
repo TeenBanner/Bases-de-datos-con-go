@@ -20,6 +20,7 @@ const (
 	psqlCreateProduct  = `INSERT INTO products(name, observations, price, created_at) VALUES($1, $2, $3, $4) RETURNING id`
 	psqlGetAllProducts = `SELECT id, name, observations, price, created_at, updated_at FROM products`
 	psqlGetProductByID = psqlGetAllProducts + " WHERE id = $1"
+	psqlUpdateProduct  = "UPDATE products SET name = $1, observations = $2, price =$3, updated_at = $4 WHERE id = $5"
 )
 
 // Psql used for work with postgres -product
@@ -118,6 +119,7 @@ func (p *PsqlProduct) GetByID(ID uint) (*product.Model, error) {
 	return scanRowProduct(stmt.QueryRow(ID))
 }
 
+// scanRowProducts it's used for mapp the elements comming from DB INTO a Product Model
 func scanRowProduct(s scanner) (*product.Model, error) {
 	ModelProduct := &product.Model{}
 	// estructuras para manejar nullos
@@ -140,4 +142,34 @@ func scanRowProduct(s scanner) (*product.Model, error) {
 	ModelProduct.UpdatedAt = UpdatedAtNull.Time
 	// retornamos el scanneo si todo sale bien
 	return ModelProduct, nil
+}
+
+// Update implements the interface Storaga, it's used for Update a product
+func (p *PsqlProduct) Update(m *product.Model) error { // recibe un puntero a un producto  y devuelve un posible error
+	// Preparamos la declaracion sql
+	stmt, err := p.db.Prepare(psqlUpdateProduct)
+	if err != nil {
+		return err
+	}
+	// Cerramos la conexion si finaliza la funcion por un error
+	defer stmt.Close()
+	// hacemos la ejecucion de la sentencia prepararada y le pasamos los valores de campos a actualizar en los marcadores de posicion con los valores del puntero de producto de los parametros
+	res, err := stmt.Exec(
+		m.Name,
+		stringtoNull(m.Observation),
+		m.Price,
+		m.UpdatedAt,
+		m.ID,
+	)
+	if err != nil {
+		return err
+	}
+	rowsaffcted, err := res.RowsAffected()
+
+	if rowsaffcted != 1 {
+		return fmt.Errorf("No existe un registro con el id: %v", m.ID)
+	}
+	fmt.Println("Producto actualizado correctamente")
+
+	return nil
 }
