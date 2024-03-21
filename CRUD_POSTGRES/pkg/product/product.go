@@ -1,6 +1,9 @@
 package product
 
-import "time"
+import (
+	"fmt"
+	"time"
+)
 
 // model of product
 type Model struct {
@@ -12,13 +15,18 @@ type Model struct {
 	UpdatedAt   time.Time
 }
 
+// Format Data Recived From DB
+func (m *Model) String() string {
+	return fmt.Sprintf("%02d | %-20s | %-20s | %5d | %10s | %10s", m.ID, m.Name, m.Observation, m.Price, m.CreatedAt.Format("2006-01-02"), m.UpdatedAt.Format("2006-01-02"))
+}
+
 type Models []*Model
 
 type Storage interface {
 	Migrate() error
 	Create(*Model) error
 	// Update(*Model) error
-	// GetAll() (Models, error)
+	GetAll() (Models, error)
 	// GetByID(uint) (*Model, error)
 	// Delete() error
 }
@@ -44,4 +52,8 @@ func (s *Service) Create(m *Model) error {
 	m.CreatedAt = time.Now()
 	// Retornamos el posible error al ejecutar el metodo Create de la interfaz Storage
 	return s.storage.Create(m)
+}
+
+func (s *Service) GetAll() (Models, error) {
+	return s.storage.GetAll()
 }

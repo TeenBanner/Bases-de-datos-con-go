@@ -1,1 +1,3 @@
 El proyecto como lo dice su nombre es un C -Create R -Read U -Update D -Delete utilizando una base de datos postgresql
+
+La estructua del CRUD se compone de varios paquete los cuales contienen las implementaciones del la logica de la aplicacion y la interaccion con la base de datos, estos paquetes son storage(manejo de DB), product(Modelo e interaccion con storage de los productos)...

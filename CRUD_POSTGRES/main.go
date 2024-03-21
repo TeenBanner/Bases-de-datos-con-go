@@ -37,7 +37,7 @@ func main() {
 	// Create Method using storageproduct && service product
 
 	// instaciamos el producto a crear
-	m := &product.Model{
+	/*m := &product.Model{
 		Name:        "Bases de datos con Go",
 		Price:       46,
 		Observation: "on fire",
@@ -48,5 +48,15 @@ func main() {
 	// revisamos el id del producto insertado y la fecha de creacion que se creo solo con llamar al metodo migrate
 
 	fmt.Printf("%+v", m)
+	*/
+
+	// GetALl Method
+
+	products, err := serviceProduct.GetAll()
+	if err != nil {
+		log.Fatalf("Product.GetAll(): %v", err)
+	}
+
+	fmt.Println(products)
 
 }
