@@ -1,6 +1,8 @@
 package main
 
 import (
+	"database/sql"
+	"errors"
 	"fmt"
 	"log"
 
@@ -58,5 +60,17 @@ func main() {
 	}
 
 	fmt.Println(products)
+
+	fmt.Println("Get By ID method: ")
+
+	product, err := serviceProduct.GetByID(0)
+	switch {
+	case errors.Is(err, sql.ErrNoRows):
+		fmt.Println("El id no existe")
+	case err != nil:
+		log.Fatalf("Error: %v", err)
+	default:
+		fmt.Println(product)
+	}
 
 }
