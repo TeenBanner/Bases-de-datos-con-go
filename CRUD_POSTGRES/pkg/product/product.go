@@ -33,7 +33,7 @@ type Storage interface {
 	Update(*Model) error
 	GetAll() (Models, error)
 	GetByID(uint) (*Model, error)
-	// Delete() error
+	Delete(id uint) error
 }
 
 // servicio of product
@@ -76,4 +76,9 @@ func (s *Service) Update(m *Model) error {
 	}
 	m.UpdatedAt = time.Now()
 	return s.storage.Update(m)
+}
+
+// Delete it's used for delete a product, it implements the storage interface
+func (s *Service) Delete(Id uint) error {
+	return s.storage.Delete(Id)
 }

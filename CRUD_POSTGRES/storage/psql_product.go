@@ -21,6 +21,7 @@ const (
 	psqlGetAllProducts = `SELECT id, name, observations, price, created_at, updated_at FROM products`
 	psqlGetProductByID = psqlGetAllProducts + " WHERE id = $1"
 	psqlUpdateProduct  = "UPDATE products SET name = $1, observations = $2, price =$3, updated_at = $4 WHERE id = $5"
+	psqlDeleteProduct  = "DELETE FROM products WHERE id = $1"
 )
 
 // Psql used for work with postgres -product
@@ -170,6 +171,32 @@ func (p *PsqlProduct) Update(m *product.Model) error { // recibe un puntero a un
 		return fmt.Errorf("No existe un registro con el id: %v", m.ID)
 	}
 	fmt.Println("Producto actualizado correctamente")
+
+	return nil
+}
+
+func (p *PsqlProduct) Delete(Id uint) error {
+	stmt, err := p.db.Prepare(psqlDeleteProduct)
+	if err != nil {
+		return err
+	}
+
+	defer db.Close()
+
+	res, err := stmt.Exec(Id)
+	if err != nil {
+		return err
+	}
+
+	rowsAffcted, err := res.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if rowsAffcted != 1 {
+		return fmt.Errorf("No existe un registro con el id: %v", Id)
+	}
+
+	fmt.Println("Producto Eliminado satisfactoriamente")
 
 	return nil
 }

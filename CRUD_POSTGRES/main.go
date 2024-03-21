@@ -72,15 +72,21 @@ func main() {
 
 	// Update method
 
-	productToUpdate := &product.Model{
-		ID:    40,
-		Name:  "DB con go",
-		Price: 80,
-	}
+	// productToUpdate := &product.Model{
+	// 	ID:    40,
+	// 	Name:  "DB con go",
+	// 	Price: 80,
+	// }
 
-	err := serviceProduct.Update(productToUpdate)
+	// err := serviceProduct.Update(productToUpdate)
+	// if err != nil {
+	// 	log.Fatalf("Error al actualizar el producto %v", err)
+	// }
+	// delete method
+
+	err := serviceProduct.Delete(3)
 	if err != nil {
-		log.Fatalf("Error al actualizar el producto %v", err)
+		log.Fatalf("Error al eliminar el producto: %v", err)
 	}
 
 }
