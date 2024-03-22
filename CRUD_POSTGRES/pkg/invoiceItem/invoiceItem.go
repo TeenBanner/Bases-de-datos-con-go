@@ -19,7 +19,7 @@ type Models []*Model
 
 type Storage interface {
 	Migrate() error
-	CreateTx(*sql.Tx, uint, *Models) error
+	CreateTx(*sql.Tx, uint, Models) error
 }
 
 // service of invoice item

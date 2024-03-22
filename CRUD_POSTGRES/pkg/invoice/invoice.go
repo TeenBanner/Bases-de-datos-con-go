@@ -7,7 +7,7 @@ import (
 
 type Model struct {
 	Header *invoiceheader.Model
-	Items  *invoiceitem.Models
+	Items  invoiceitem.Models
 }
 
 // storage interface that must implement a db storage

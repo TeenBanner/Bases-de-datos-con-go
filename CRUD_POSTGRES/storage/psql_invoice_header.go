@@ -49,12 +49,17 @@ func (p *PsqlInvoiceHeader) Migrate() error {
 	return nil
 }
 
+// CreateTx implements invoiceHeader.Storage, it creates the invoice Header of invoice
 func (p *PsqlInvoiceHeader) CreateTx(tx *sql.Tx, h *invoiceheader.Model) error {
+	// prepare Sql Sentence
 	stmt, err := tx.Prepare(psqlCreateInvoiceHeader)
 	if err != nil {
 		return err
 	}
 	defer stmt.Close()
 
-	return stmt.QueryRow(h.Client).Scan(&h.ID, &h.CreatedAt)
+	fmt.Println("Transaccion de invoiceHeader Realizada")
+	// hace la consulta y le pasamos el campo cliente del modelo de InvoiceHeader recibido para pasarlo como el valor del marcador de poscicion de la sentencia sql
+	// para despues mappear los campos del modelo de InvoiceHeader con los datos que la DB nos esta regresando
+	return stmt.QueryRow(h.Client).Scan(&h.ID, &h.CreatedAt) // esta funcion devuelve un nil por lo que podemos retornarla al final de la funcio
 }

@@ -25,8 +25,8 @@ const (
 	);`
 
 	psqlCreateInvoiceItem = `
-		INSERT INTO invoice_items()
-	`
+		INSERT INTO invoice_items(invoice_header_id, product_id) VALUES($1, $2) RETURNING id, created_at
+		`
 )
 
 // Psql used for work with postgres -Invoice_items
@@ -58,6 +58,27 @@ func (p *PsqlInvoiceItem) Migrate() error {
 	return nil
 }
 
-func (p *PsqlInvoiceItem) CreateTx(tx *sql.Tx, Item *invoiceitem.Model) {
+// CreateTx creates a new transaction of invoiceItems
+func (p *PsqlInvoiceItem) CreateTx(tx *sql.Tx, headerID uint, ItemSlice invoiceitem.Models) error {
+	// Prepara la sentencia sql
+	stmt, err := tx.Prepare(psqlCreateInvoiceItem)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+	// itera por cada uno de los items para crear el InvoiceItems de Invoice
+	for _, item := range ItemSlice {
+		err = stmt.QueryRow(headerID, item.ProductID).Scan( // Hace la consutla y mappea los datos en los campos del InvoiceItems
+			&item.ID,
+			&item.CreatedAt,
+		)
+		if err != nil {
+			return err
+		}
 
+	}
+
+	fmt.Println("transaccion de invoice Item Realizada")
+
+	return nil
 }
