@@ -1,0 +1,14 @@
+To Create a new mysql db for this proyect you may need docker
+1. Create MysqlContainer with docker:
+    docker run --name MySqlGoDB -e MYSQL_ROOT_PASSWORD=edteam -p 3306:8000 -d mysql
+2. Access the container to Create DataBase
+    docker exec -it MySqlGoDB bash
+3 When you get in the container run this command to access to the MySqlMonitor whith this command
+    mysql (then you'r going to need to introduce the roo user password that already defined on the creation of the container)
+4 then Create the data base with this Sql sentence
+    CREATE DATABASE MySqlGoDb;
+
+DB_PASSWORD = edteam
+DB_Name = MySqlGoDB
+DB_PORT_CONTAINER_PORT = 8000
+MYSQL_PORT = 3306
